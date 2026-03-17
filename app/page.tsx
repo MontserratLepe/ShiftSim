@@ -93,12 +93,8 @@ export default function ShiftSimHome() {
                 <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-tighter">
                   <span className="text-red-600">▪</span> Company & Location Name
                 </li>
-                <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-tighter">
-                  <span className="text-red-600">▪</span> Type of Menu (Tacos, Burgers, etc.)
-                </li>
-                <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-tighter">
-                  <span className="text-red-600">▪</span> Number of Terminals needed
-                </li>
+               
+               
                 <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-tighter">
                   <span className="text-red-600">▪</span> Best Phone Number to reach you
                 </li>
