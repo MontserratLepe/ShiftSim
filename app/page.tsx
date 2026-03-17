@@ -74,22 +74,42 @@ export default function ShiftSimHome() {
         </div>
       )}
 
-      {/* EMAIL FALLBACK MODAL */}
+     {/* EMAIL FALLBACK MODAL */}
       {showEmailFallback && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 p-4">
-          <div className="bg-zinc-900 border border-white/10 p-8 w-full max-w-sm text-center shadow-2xl">
+          <div className="bg-zinc-900 border border-white/10 p-8 w-full max-w-md shadow-2xl">
             <h3 className="text-xl font-black uppercase mb-4 text-red-600 italic">Contact Systems</h3>
-            <p className="text-zinc-400 text-sm mb-6 font-bold uppercase tracking-tight">
-              Email us directly to register:
+            <p className="text-zinc-400 text-sm mb-4 font-bold uppercase tracking-tight">
+              If your mail app didn't open, please email:
             </p>
-            <div className="bg-black border border-zinc-800 p-4 mb-6 select-all font-mono text-red-500 break-all text-sm font-bold">
+            
+            <div className="bg-black border border-zinc-800 p-4 mb-6 select-all font-mono text-red-500 break-all text-sm font-bold text-center">
               {emailRecipient}
             </div>
+
+            <div className="text-left mb-8">
+              <p className="text-[10px] font-black uppercase text-zinc-500 mb-3 tracking-[0.2em]">Include these details:</p>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-tighter">
+                  <span className="text-red-600">▪</span> Company & Location Name
+                </li>
+                <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-tighter">
+                  <span className="text-red-600">▪</span> Type of Menu (Tacos, Burgers, etc.)
+                </li>
+                <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-tighter">
+                  <span className="text-red-600">▪</span> Number of Terminals needed
+                </li>
+                <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-tighter">
+                  <span className="text-red-600">▪</span> Best Phone Number to reach you
+                </li>
+              </ul>
+            </div>
+
             <button 
               onClick={() => setShowEmailFallback(false)}
-              className="w-full bg-white text-black py-3 font-black uppercase text-xs hover:bg-red-600 hover:text-white transition-all"
+              className="w-full bg-white text-black py-4 font-black uppercase text-xs hover:bg-red-600 hover:text-white transition-all"
             >
-              Close Window
+              Back to Terminal
             </button>
           </div>
         </div>
@@ -114,8 +134,8 @@ export default function ShiftSimHome() {
           WORK <span className="text-white">SMARTER.</span>
         </h1>
         <p className="text-zinc-500 text-lg md:text-xl max-w-xl mx-auto mb-10 font-bold uppercase tracking-tight italic">
-          The industry-standard POS simulator. <br/>
-          Eliminate training errors before the rush begins.
+          A One Of A Kind POS Simulator <br/>
+          For Your Business Needs.
         </p>
         <div className="flex justify-center">
           <button 
