@@ -15,10 +15,17 @@ export default function ShiftSimHome() {
       name: "Mi Mexico", 
       path: "/mimexico", 
       emoji: "🌮", 
-      code: "MEXICO123", // Set the code here
+      code: "MEXICO123", 
       color: "border-red-600" 
     },
   ];
+
+  // Pre-filled email details
+  const emailRecipient = "playshiftsim@gmail.com";
+  const emailSubject = "New Business Registration - ShiftSim";
+  const emailBody = `Hello ShiftSim Team,%0D%0A%0D%0AI would like to register my business for the POS Training Simulator.%0D%0A%0D%0ACOMPANY NAME: %0D%0AMENU TYPE: %0D%0AAPPROX. NUMBER OF STAFF: %0D%0ACONTACT PHONE: %0D%0A%0D%0AThank you!`;
+
+  const mailtoLink = `mailto:${emailRecipient}?subject=${emailSubject}&body=${emailBody}`;
 
   const handleAccess = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,16 +79,33 @@ export default function ShiftSimHome() {
       {/* HERO SECTION */}
       <header className="max-w-4xl mx-auto pt-24 pb-20 px-6 text-center">
         <h1 className="text-7xl md:text-9xl font-black tracking-tighter mb-4 leading-none uppercase italic">
-          TRAIN <span className="text-red-600">FASTER.</span><br /> 
+          TRAIN <span className="text-red-600 text-stroke-white">FASTER.</span><br /> 
           WORK <span className="text-white">SMARTER.</span>
         </h1>
-        <p className="text-zinc-500 text-lg md:text-xl max-w-xl mx-auto mb-10 font-bold uppercase">
+        <p className="text-zinc-500 text-lg md:text-xl max-w-xl mx-auto mb-10 font-bold uppercase tracking-tight">
           Elite POS training simulators for high-volume restaurants.
         </p>
+        <div className="flex flex-col md:flex-row gap-4 justify-center">
+          <a href="#portals" className="bg-white text-black px-10 py-4 font-black hover:bg-red-600 hover:text-white transition-all uppercase tracking-tighter italic text-xl">
+            Launch Terminals
+          </a>
+          {/* UPDATED REGISTER BUTTON */}
+          <a 
+            href={mailtoLink}
+            className="bg-transparent border-2 border-zinc-800 text-zinc-500 px-10 py-4 font-black hover:border-red-600 hover:text-red-600 transition-all uppercase tracking-tighter flex items-center justify-center"
+          >
+            Register Business
+          </a>
+        </div>
       </header>
 
       {/* CLIENT PORTALS */}
       <section id="portals" className="max-w-5xl mx-auto px-6 py-10">
+        <div className="flex items-center gap-4 mb-12">
+          <div className="w-3 h-3 bg-red-600 rotate-45" />
+          <h2 className="text-sm font-black uppercase tracking-[0.4em] text-zinc-500">Authorized Access Points</h2>
+          <div className="h-[1px] flex-grow bg-zinc-900" />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {clients.map((client) => (
             <button 
@@ -104,13 +128,20 @@ export default function ShiftSimHome() {
 
       {/* FOOTER */}
       <footer className="max-w-6xl mx-auto p-12 mt-20 border-t border-zinc-900 flex flex-col items-center">
-        <div className="grayscale opacity-30 mb-6">
-             <Image src="/logo.png" alt="footer logo" width={40} height={40} className="object-contain" />
+        <div className="grayscale opacity-30 mb-6 relative w-10 h-10">
+             <Image src="/logo.png" alt="footer logo" fill className="object-contain" />
         </div>
         <p className="text-[9px] font-black text-zinc-700 uppercase tracking-[0.8em]">
           ShiftSim Systems // Speed. Accuracy. Profit.
         </p>
       </footer>
+
+      <style jsx global>{`
+        .text-stroke-white {
+          -webkit-text-stroke: 1px white;
+          color: transparent;
+        }
+      `}</style>
     </div>
   );
 }
