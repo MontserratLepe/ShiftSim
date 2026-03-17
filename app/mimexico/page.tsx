@@ -41,6 +41,13 @@ const MENU_DATA: any = {
 };
 
 export default function MiMexicoGame() {
+  // --- LOGIN STATES ---
+  const [accessCode, setAccessCode] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const SECRET_CODE = "MEXICO123"; // 🛠️ CHANGE YOUR CODE HERE
+
+  // --- POS GAME STATES ---
   const [cart, setCart] = useState<any[]>([]);
   const [money, setMoney] = useState(0);
   const [currentCategory, setCurrentCategory] = useState("MAIN");
@@ -51,9 +58,19 @@ export default function MiMexicoGame() {
 
   useEffect(() => {
     let interval: any;
-    if (gameActive) interval = setInterval(() => setSeconds(s => s + 1), 1000);
+    if (gameActive && isAuthenticated) interval = setInterval(() => setSeconds(s => s + 1), 1000);
     return () => clearInterval(interval);
-  }, [gameActive]);
+  }, [gameActive, isAuthenticated]);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (accessCode.toUpperCase() === SECRET_CODE.toUpperCase()) {
+      setIsAuthenticated(true);
+      setLoginError("");
+    } else {
+      setLoginError("Invalid Access Code");
+    }
+  };
 
   const generateOrder = () => {
     const pool = ['MAIN', 'LUNCHES', 'SIDES', 'CARNES'];
@@ -82,25 +99,55 @@ export default function MiMexicoGame() {
     }
   };
 
+  // --- SCREEN 1: LOGIN GATE ---
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black text-white p-4">
+        <div className="bg-zinc-900 p-8 rounded-2xl border border-zinc-700 w-full max-w-md shadow-2xl">
+          <div className="text-center mb-8">
+            <h1 className="text-5xl mb-4">🌮</h1>
+            <h2 className="text-3xl font-bold text-yellow-500 uppercase tracking-tight">Mi Mexico</h2>
+            <p className="text-zinc-500 mt-2 italic">Shift Simulator Login</p>
+          </div>
+          <form onSubmit={handleLogin} className="space-y-6">
+            <input 
+              type="text" 
+              placeholder="ENTER ACCESS CODE"
+              className="w-full bg-black border-2 border-zinc-800 p-4 rounded-lg text-center text-2xl font-black tracking-widest focus:border-yellow-500 outline-none transition-all uppercase"
+              value={accessCode}
+              onChange={(e) => setAccessCode(e.target.value)}
+            />
+            {loginError && <p className="text-red-500 text-center font-bold animate-pulse">{loginError}</p>}
+            <button type="submit" className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-lg text-xl transition-transform active:scale-95">
+              OPEN TERMINAL
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // --- SCREEN 2: THE ACTUAL GAME ---
   return (
-    // "min-w-[1024px]" ensures the design doesn't crush itself on small screens
-    // "scale" CSS allows it to fit the screen visually
     <div className="h-screen bg-black text-white font-sans flex flex-col overflow-hidden select-none items-center justify-center">
-      
       <div className="w-[1024px] h-[768px] flex flex-col scale-[0.35] sm:scale-[0.6] md:scale-[0.8] lg:scale-100 origin-center transition-transform">
         
         {/* HEADER */}
         <div className="bg-zinc-300 text-black flex justify-between items-center px-4 py-1 border-b border-zinc-500">
           <div className="flex gap-4 items-center">
              <span className="bg-red-600 text-white px-4 py-0.5 font-black italic">TIME: {seconds}s</span>
-             <span className="font-bold text-xs uppercase italic">Server: ShiftSim</span>
+             <button 
+                onClick={() => setIsAuthenticated(false)} 
+                className="bg-zinc-800 text-white px-2 py-0.5 text-[10px] rounded hover:bg-black uppercase font-bold"
+             >
+                Log Out
+             </button>
           </div>
-          <span className="font-bold text-xs">MI MEXICO POS</span>
+          <span className="font-bold text-xs uppercase italic text-zinc-600">Training Portal: Mi Mexico</span>
         </div>
 
         <div className="flex-grow flex p-1 gap-1 bg-zinc-900 overflow-hidden">
-          
-          {/* LEFT: ORDER AREA (40%) */}
+          {/* LEFT: ORDER AREA */}
           <div className="w-[40%] flex flex-col gap-1">
             <div className="bg-white text-black p-2 border-b-4 border-blue-900">
               <p className="text-[10px] font-black text-blue-900 uppercase">Customer Prompt:</p>
@@ -108,18 +155,18 @@ export default function MiMexicoGame() {
             </div>
 
             <div className="flex-grow bg-blue-700 border-2 border-zinc-400 p-2 font-mono text-[14px] relative">
-              <div className="flex justify-between border-b border-blue-400 mb-1 font-black">
-                <span>ShiftSim</span><span>TRAN# 001</span>
+              <div className="flex justify-between border-b border-blue-400 mb-1 font-black uppercase text-[10px]">
+                <span>Server: ShiftSim</span><span>TRAN# 001</span>
               </div>
               <div className="overflow-y-auto h-[300px]">
                 {cart.map((item, i) => (
-                  <div key={i} className="flex justify-between border-b border-blue-600/30 py-1 uppercase">
+                  <div key={i} className="flex justify-between border-b border-blue-600/30 py-1 uppercase font-bold">
                     <span>1 {item.name}</span><span>{item.price}.00</span>
                   </div>
                 ))}
               </div>
               <div className="absolute bottom-0 left-0 right-0 bg-black p-2 flex justify-between font-black text-blue-400 text-xl border-t-2 border-blue-900">
-                <span className="text-xs">TOTAL</span><span>${cart.reduce((a,b)=>a+b.price, 0)}.00</span>
+                <span className="text-xs">TOTAL DUE</span><span>${cart.reduce((a,b)=>a+b.price, 0)}.00</span>
               </div>
             </div>
 
@@ -131,7 +178,7 @@ export default function MiMexicoGame() {
             </div>
           </div>
 
-          {/* RIGHT: TABS & MENU GRID (53%) */}
+          {/* RIGHT: TABS & MENU GRID */}
           <div className="w-[53%] flex flex-col gap-1">
             <div className="grid grid-cols-3 gap-1 h-14">
               <button onClick={() => setCurrentCategory("MAIN")} className="bg-yellow-700 text-white font-black text-[11px] uppercase border-b-4 border-yellow-900">Apps</button>
@@ -164,7 +211,7 @@ export default function MiMexicoGame() {
             </div>
           </div>
 
-          {/* RIGHT BRAND PILLAR (7%) */}
+          {/* BRAND PILLAR */}
           <div className="w-[7%] bg-zinc-800 border-l border-zinc-700 flex flex-col justify-center items-center">
             <p className="rotate-90 whitespace-nowrap text-zinc-600 font-black text-2xl tracking-[1.5rem] uppercase opacity-40">MI MEXICO</p>
           </div>
@@ -172,7 +219,7 @@ export default function MiMexicoGame() {
 
         {/* FOOTER */}
         <div className="bg-black border-t border-zinc-800 px-6 py-1 flex justify-between items-center">
-          <span className="text-zinc-600 font-bold text-[9px] uppercase tracking-tighter italic">Training Module v1.0</span>
+          <span className="text-zinc-600 font-bold text-[9px] uppercase tracking-tighter italic">ShiftSim v1.0</span>
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-bold text-zinc-500 uppercase">Bank:</span>
             <span className="text-xl font-black text-green-400">${money}.00</span>
