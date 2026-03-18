@@ -28,7 +28,10 @@ export default function ShiftSimHome() {
   const handleRegisterClick = (e: React.MouseEvent) => {
     e.preventDefault();
     const emailSubject = "New Business Registration - ShiftSim";
-    const emailBody = `Hello ShiftSim Team,%0D%0A%0D%0AI would like to register my business for the POS Training Simulator.%0D%0A%0D%0AThank you!`;
+    
+    // This creates the "Form" inside the email body
+    const emailBody = `Hello ShiftSim Team,%0D%0A%0D%0AI would like to register my business for the POS Training Simulator.%0D%0A%0D%0ACOMPANY NAME: %0D%0APHONE NUMBER: %0D%0AMENU TYPE: %0D%0A%0D%0AThank you!`;
+    
     const mailto = `mailto:${emailRecipient}?subject=${encodeURIComponent(emailSubject)}&body=${emailBody}`;
     
     setShowEmailFallback(true);
@@ -38,6 +41,9 @@ export default function ShiftSimHome() {
   const handleAccess = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputCode.toUpperCase() === activeClient.code.toUpperCase()) {
+      // THIS LINE IS NEW: It gives the browser the "Key" to the door
+      sessionStorage.setItem("mimexico_auth", "true"); 
+      
       router.push(activeClient.path);
     } else {
       alert("INVALID ACCESS CODE");
